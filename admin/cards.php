@@ -13,7 +13,7 @@
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
     <style>
     .category-card {
-        width: 200px;
+        width: 300px; /* Ajusta el ancho según tus preferencias */
         height: 400px;
         border: 1px solid #ccc;
         padding: 10px;
@@ -26,6 +26,7 @@
         background-repeat: no-repeat;
         background-size: cover;
         color: white; /* Letras blancas */
+        border-radius: 5px; /* Agrega esquinas redondeadas */
     }
 
     .category-card:hover {
@@ -46,12 +47,21 @@
     .category-card .btn {
         display: inline-block;
     }
+    .category-card .btn {
+            margin-top: 10px; /* Agrega separación en la parte superior del botón */
+        }
+
 
     .category-card img {
         display: none;
     }
+    .category-card .btn {
+        margin-top: 10px; /* Agrega separación en la parte superior del botón */
+        margin-right: 5px; /* Agrega separación entre los botones */
+    }
     </style>
 </head>
+
 
 <body>
 
@@ -84,11 +94,11 @@
                     while ($row = mysqli_fetch_assoc($result)) {
                         echo "<div class='category-card' style='background-image: url(" . $row['Image'] . ");'>";
                         echo "<h3 style='margin-top: 50%;'>" . $row['CategoryName'] . "</h3>";
-                        echo "<p>" . $row['Description'] . "</p>";
                         echo "<a href='libros.php?categoria=" . $row['CategoryName'] . "' class='btn btn-primary'>Ver libros</a>";
                         echo "<form action='eliminar_categoria.php' method='post' onsubmit='return confirm(\"¿Estás seguro de eliminar esta categoría?\")'>";
-                        echo "<input type='hidden' name='categoria_id' value='" . $row['id'] . "' />";
                         echo "<button type='submit' class='btn btn-danger'>Eliminar</button>";
+
+                        echo "<input type='hidden' name='categoria_id' value='" . $row['id'] . "' />";
                         echo "</form>";
                         echo "</div>";
                     }

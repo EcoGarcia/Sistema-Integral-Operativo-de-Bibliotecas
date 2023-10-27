@@ -40,9 +40,9 @@ if (isset($_POST['signup'])) {
     $query->execute();
     $lastInsertId = $dbh->lastInsertId();
     if ($lastInsertId) {
-        echo '<script>alert("Your Registration successfull and your student id is  "+"' . $StudentId . '")</script>';
+        echo '<script>alert("Estudiante registrado");window.location ="../admin/reg-students.php" </script>';
     } else {
-        echo "<script>alert('Something went wrong. Please try again');</script>";
+        echo "<script>alert('intentalo de nuevo');</script>";
     }
 }
 // }
@@ -78,56 +78,56 @@ if (isset($_POST['signup'])) {
 <!-- Codigo del formulario -->
 
 <div class="content-wrapper">
-         <div class="container">
+    <div class="container">
         <div class="row pad-botm">
             <div class="col-md-12">
                 <h4 class="header-line">Registro de estudiante</h4>
-                
-                            </div>
+
+            </div>
 
         </div>
-             <div class="row">
-           
-<div class="col-md-9 col-md-offset-1">
-               <div class="panel panel-danger">
-                        <div class="panel-heading">
-                           FORMULARIO DE REGISTRO
-                        </div>
-                        <div class="panel-body">
-                            <form name="signup" method="post" onSubmit="return valid();">
-<div class="form-group">
-<label>Ingrese el nombre completo</label>
-<input class="form-control" type="text" name="fullanme" autocomplete="off" required />
-</div>
+        <div class="row">
 
-
-
-                                        
-<div class="form-group">
-<label>Ingrese correo electrónico</label>
-<input class="form-control" type="email" name="email" id="emailid" onBlur="checkAvailability()"  autocomplete="off"  required  />
-   <span id="user-availability-status" style="font-size:12px;"></span> 
-</div>
-
-<div class="form-group">
-<label>Introducir la contraseña</label>
-<input class="form-control" type="password" name="password" autocomplete="off" required  />
-</div>
-
-<div class="form-group">
-<label>Confirmar contraseña</label>
-<input class="form-control"  type="password" name="confirmpassword" autocomplete="off" required  />
-<p class="help-block"><a href="user-forgot-password.php">Has olvidado tu contraseña</a></p>
-</div>                               
-<button type="submit" name="signup" class="btn btn-danger" id="submit">Regístrate ahora </button>
-
-                                    </form>
+            <div class="col-md-9 col-md-offset-1">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        FORMULARIO DE REGISTRO
+                    </div>
+                    <div class="panel-body">
+                        <form name="signup" method="post" onSubmit="return valid();">
+                            <div class="form-group">
+                                <label>Ingrese el nombre completo</label>
+                                <input class="form-control" type="text" name="fullanme" autocomplete="off" required />
                             </div>
-                        </div>
+
+
+
+
+                            <div class="form-group">
+                                <label>Ingrese correo electrónico</label>
+                                <input class="form-control" type="email" name="email" id="emailid" onBlur="checkAvailability()" autocomplete="off"  required  required pattern=".+@utsalamanca.edu.mx" title="DEBE SER EL CORREO DE LA ESCUELA" />
+                                <span id="user-availability-status" style="font-size:12px;"></span>
                             </div>
+
+                            <div class="form-group">
+                                <label>Introducir la contraseña</label>
+                                <input class="form-control" type="password" name="password" autocomplete="off" required />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Confirmar contraseña</label>
+                                <input class="form-control" type="password" name="confirmpassword" autocomplete="off" required />
+                                <!-- <p class="help-block"><a href="user-forgot-password.php">Has olvidado tu contraseña</a></p> -->
+                            </div>
+                            <button type="submit" name="signup" class="btn btn-danger" id="submit">Regístrate ahora </button>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    </div>
+</div>
 
 
 <!-- Pie de página -->

@@ -53,6 +53,15 @@ $authorsChunks = array_chunk($authors, 5);
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 
 </head>
+<style>
+    th {
+    text-align: center;
+    }
+    td {
+        text-align: center;
+    }
+</style>
+
 <body>
     <!------MENU SECTION START-->
     <?php include('includes/header.php');?>
@@ -67,35 +76,35 @@ $authorsChunks = array_chunk($authors, 5);
         </div>
 
         <div class="row">
-            <div class="col-md-4">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        Nombres de Libros y Cantidad
-                    </div>
-                    <div class="panel-body">
-                        <div class="table-responsive">
-                            <?php foreach ($booksChunks as $chunk) : ?>
-                                <table class="table table-striped table-bordered table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Nombre del Libro</th>
-                                            <th>Cantidad</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($chunk as $book) : ?>
-                                            <tr>
-                                                <td><?php echo $book['nombre']; ?></td>
-                                                <td><?php echo $book['cantidad']; ?></td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
+        <div class="col-md-4">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            Nombres de Libros y Cantidad
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Nombre del Libro</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($booksChunks as $chunk) : ?>
+                            <?php foreach ($chunk as $book) : ?>
+                                <tr>
+                                    <td><?php echo $book['nombre']; ?></td>
+                                    <td><?php echo $book['cantidad']; ?></td>
+                                </tr>
                             <?php endforeach; ?>
-                        </div>
-                    </div>
-                </div>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
+        </div>
+    </div>
+</div>
             <div class="col-md-4">
                 <div class="panel panel-info">
                     <div class="panel-heading">
@@ -126,33 +135,33 @@ $authorsChunks = array_chunk($authors, 5);
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="panel panel-info">
-                    <div class="panel-heading">
-                        Autores registrados
-                    </div>
-                    <div class="panel-body">
-                        <div class="table-responsive">
-                            <?php foreach ($authorsChunks as $chunk) : ?>
-                                <table class="table table-striped table-bordered table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>Autores registrados</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php foreach ($chunk as $author) : ?>
-                                            <tr>
-                                                <td><?php echo $author['autor']; ?></td>
-                                            </tr>
-                                        <?php endforeach; ?>
-                                    </tbody>
-                                </table>
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            Autores registrados
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Autores registrados</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($authorsChunks as $chunk) : ?>
+                            <?php foreach ($chunk as $author) : ?>
+                                <tr>
+                                    <td><?php echo $author['autor']; ?></td>
+                                </tr>
                             <?php endforeach; ?>
-                        </div>
-                    </div>
-                </div>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
             </div>
         </div>
+    </div>
+</div>
+
     </div>
 
     <!-- CONTENT-WRAPPER SECTION END-->

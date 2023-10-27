@@ -1,5 +1,3 @@
-<?php include("includes/config.php") ?>
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -16,6 +14,11 @@
     <link href="assets/css/style.css" rel="stylesheet" />
     <!-- GOOGLE FONT -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+
+
+    <style>
+        th
+    </style>
 
 </head>
 
@@ -46,8 +49,8 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Agregar portada<span style="color:red;">*</span></label>
-                                        <input type="file" name="portada" class="form-control" required>
-                                    </div>
+                                        <input type="file" name="portada" accept="image/*"  class="form-control" required>
+                                    </div> 
                                     <div class="form-group">
                                         <label>Nombre del autor<span style="color:red;">*</span></label>
                                         <input type="text" name="autor" class="form-control">
@@ -138,7 +141,12 @@
                                     <div class="form-group">
                                         <label>Cantidad</label>
                                         <input type="number" name="cantidad" class="form-control" required>
+                                    </div>   
+                                      <div class="form-group">
+                                        <label>Estado del libro<span style="color:red;">*</span></label>
+                                        <input type="text" name="estado" class="form-control" required>
                                     </div>
+                                    
                                    
 
 

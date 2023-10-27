@@ -2,7 +2,7 @@
 session_start();
 include('includes/config.php');
 error_reporting(0);
-if (strlen($_SESSION['alogin']) == 0) {
+if (strlen($_SESSION['login']) == 0) {
     header('location:index.php');
 } else {
     if (isset($_POST['update'])) {
@@ -21,7 +21,6 @@ if (strlen($_SESSION['alogin']) == 0) {
     }
 
 ?>
-
     <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -79,8 +78,8 @@ if (strlen($_SESSION['alogin']) == 0) {
                                         foreach ($results as $result) {               ?>
 
                                             <!-- <div class="form-group"> -->
-                                            <!-- <label>ID de estudiante : </label> -->
-                                            <!-- <?php echo htmlentities($result->StudentId); ?> -->
+                                                <!-- <label>ID de estudiante : </label> -->
+                                                <!-- <?php echo htmlentities($result->StudentId); ?> -->
                                             <!-- </div> -->
 
                                             <!-- <div class="form-group">
@@ -108,7 +107,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 
                                             <div class="form-group">
                                                 <label> Nombre completo</label>
-                                                <input class="form-control" type="text" name="fullanme" value="<?php echo htmlentities($result->FullName); ?>" autocomplete="off" required readonly />
+                                                <input class="form-control" type="text" name="fullanme" value="<?php echo htmlentities($result->FullName); ?>" autocomplete="off" required  readonly/>
                                             </div>
 
 

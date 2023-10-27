@@ -10,24 +10,24 @@ if (strlen($_SESSION['alogin']) == 0) {
     if (isset($_GET['inid'])) {
         $id = $_GET['inid'];
         $status = 0;
-        $sql = "update tblstudents set Status=:status WHERE id=:id";
+        $sql = "update tbladmin set Status=:status WHERE id=:id";
         $query = $dbh->prepare($sql);
         $query->bindParam(':id', $id, PDO::PARAM_STR);
         $query->bindParam(':status', $status, PDO::PARAM_STR);
         $query->execute();
-        header('location:reg-students.php');
+        header('location:administradores.php');
     }
 
     // código para activar estudiantes
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
         $status = 1;
-        $sql = "update tblstudents set Status=:status WHERE id=:id";
+        $sql = "update tbladmin set Status=:status WHERE id=:id";
         $query = $dbh->prepare($sql);
         $query->bindParam(':id', $id, PDO::PARAM_STR);
         $query->bindParam(':status', $status, PDO::PARAM_STR);
         $query->execute();
-        header('location:reg-students.php');
+        header('location:administradores.php');
     }
 
     // código para editar estudiantes
@@ -40,11 +40,11 @@ if (strlen($_SESSION['alogin']) == 0) {
     // código para eliminar estudiantes
     if (isset($_GET['delid'])) {
         $id = $_GET['delid'];
-        $sql = "DELETE FROM tblstudents WHERE id=:id";
+        $sql = "DELETE FROM tbladmin WHERE id=:id";
         $query = $dbh->prepare($sql);
         $query->bindParam(':id', $id, PDO::PARAM_STR);
         $query->execute();
-        header('location:reg-students.php');
+        header('location:administradores.php');
     }
 ?>
 
@@ -106,7 +106,7 @@ if (strlen($_SESSION['alogin']) == 0) {
                                         </thead>
                                         <tbody>
                                             <?php
-                                            $sql = "SELECT * from tblstudents";
+                                            $sql = "SELECT * from tbladmin";
                                             $query = $dbh->prepare($sql);
                                             $query->execute();
                                             $results = $query->fetchAll(PDO::FETCH_OBJ);
@@ -115,7 +115,7 @@ if (strlen($_SESSION['alogin']) == 0) {
                                                 foreach ($results as $result) { ?>
                                                     <tr class="odd gradeX">
                                                         <td class="center"><?php echo htmlentities($cnt); ?></td>
-                                                        <td class="center"><?php echo htmlentities($result->StudentId); ?></td>
+                                                        <td class="center"><?php echo htmlentities($result->AdminId); ?></td>
                                                         <td class="center"><?php echo htmlentities($result->FullName); ?></td>
                                                         <td class="center"><?php echo htmlentities($result->EmailId); ?></td>
                                                         <td class="center"><?php echo htmlentities($result->RegDate); ?></td>
@@ -128,11 +128,11 @@ if (strlen($_SESSION['alogin']) == 0) {
                                                         </td>
                                                         <td class="center">
                                                             <?php if ($result->Status == 1) { ?>
-                                                                <a href="reg-students.php?inid=<?php echo htmlentities($result->id); ?>" onclick="return confirm('Are you sure you want to block this student?');">
+                                                                <a href="administradores.php?inid=<?php echo htmlentities($result->id); ?>" onclick="return confirm('Are you sure you want to block this student?');">
                                                                     <button class="btn btn-info"> Inactivo</button>
                                                                 </a>
                                                             <?php } else { ?>
-                                                                <a href="reg-students.php?id=<?php echo htmlentities($result->id); ?>" onclick="return confirm('Are you sure you want to activate this student?');">
+                                                                <a href="administradores.php?id=<?php echo htmlentities($result->id); ?>" onclick="return confirm('Are you sure you want to activate this student?');">
                                                                     <button class="btn btn-primary"> Activo</button>
                                                                 </a>
                                                             <?php } ?>

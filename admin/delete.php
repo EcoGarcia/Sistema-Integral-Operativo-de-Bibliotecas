@@ -30,5 +30,9 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     }
 }
 
-echo "<script>window.location.href='manage-books.php';</script>";
+if(isset($book['categoria'])){
+    echo "<script>window.location.href='libros.php?categoria=" . urlencode($book['categoria']) . "';</script>";
+} else {
+    echo "<script>window.location.href='cards.php';</script>";
+}
 ?>

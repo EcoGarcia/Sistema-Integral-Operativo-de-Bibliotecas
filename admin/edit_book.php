@@ -1,5 +1,5 @@
 <?php
-require_once("includes/config.php");
+include("includes/config.php");
 
 // Obtener categorías de la tabla tblcategory
 $query_categorias = "SELECT CategoryName FROM tblcategory";
@@ -20,11 +20,11 @@ if (isset($_GET['id'])) {
         $categ = $row['categoria'];
         $aut = $row['autor'];
         $isbn = $row['isbn'];
-        $editorial = $_POST['editorial'];
+        $editorial = $row['editorial'];
         $cantidad = $row['cantidad'];
         $fecha = isset($_POST['fecha']) ? $_POST['fecha'] : '';
-        $edición = $_POST['edición'];
         $portada = $row['portada'];
+        $estado = $_POST['estado']; // Obtenemos el estado del campo de texto
     }
 }
 
@@ -37,31 +37,31 @@ if (isset($_POST['guardar'])) {
     $editorial = $_POST['editorial'];
     $cantidad = $_POST['cantidad'];
     $colocación = $_POST['colocación'];
-    $edición = $_POST['edición'];
+    $edición = isset($_POST['edición']) ? $_POST['edición'] : '';
     $fecha = $_POST['fecha'];
     $num = $_POST['num'];
+    $estado = $_POST['estado']; // Obtenemos el estado del campo de texto
+
 
     // Procesar imagen de portada 
     if ($_FILES['portada']['size'] > 0) {
         $portada = $_FILES['portada']['name'];
-        $portada_tmp = $_FILES['portada']['tmp_name'];
-        $portada_dir = "portadas/" . $portada;
-        move_uploaded_file($portada_tmp, $portada_dir);
+        $portada_temp = $_FILES['portada']['tmp_name'];
+        $destino = "../portadas/" . $portada;
+        move_uploaded_file($portada_temp, $destino);
     } else {
-        $portada_dir = $portada;
+        $destino = $portada;
     }
 
     $id = $_GET['id'];
 
-    $query = "UPDATE libros SET numero = $numero, nombre = '$nombre', categoria = '$categoria', autor = '$autor', isbn = '$isbn', cantidad = $cantidad, portada = '$portada_dir', colocación = '$colocación', edición = '$edición', fecha = '$fecha', num = '$num' WHERE id = $id";
+    $query = "UPDATE libros SET numero = $numero, estado = '$estado', nombre = '$nombre', categoria = '$categoria', autor = '$autor', isbn = '$isbn', cantidad = $cantidad, portada = '$destino', colocación = '$colocación', edición = '$edición', fecha = '$fecha', num = '$num', editorial = '$editorial' WHERE id = $id";
     mysqli_query($conexion, $query);
 
-    header("Location: libros.php");
+    header("Location: libros.php?categoria=$categoria");
     exit;
 }
 ?>
-
-<!--  -->
 
 
 <!DOCTYPE html>
@@ -81,7 +81,6 @@ if (isset($_POST['guardar'])) {
     <link href="assets/css/style.css" rel="stylesheet" />
     <!-- GOOGLE FONT -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
-
 </head>
 
 <body>
@@ -103,7 +102,7 @@ if (isset($_POST['guardar'])) {
                         </div>
                         <div class="panel-body">
                             <form role="form" method="post" enctype="multipart/form-data">
-                            <div class="form-group">
+                                <div class="form-group">
                                     <label>Numero del libro<span style="color:red;">*</span></label>
                                     <input class="form-control" type="number" name="numero" value="<?php echo htmlentities($numero); ?>" required />
                                 </div>
@@ -112,10 +111,11 @@ if (isset($_POST['guardar'])) {
                                     <input class="form-control" type="text" name="nombre-libro" value="<?php echo htmlentities($nombre); ?>" required />
                                 </div>
                                 <div class="form-group">
-                                    <label>Cambiar portada<span style="color:red;">*</span></label>
-                                    <input class="form-control" type="file" name="portada" accept="image/*" required />
+                                    <label>Cambiar portada</label>
+                                    <input class="form-control" type="file" name="portada" accept="image/*" />
                                     <p class="help-block">Seleccione una imagen de portada para el libro.</p>
                                 </div>
+
                                 <div class="form-group">
                                     <label>Nombre del autor<span style="color:red;">*</span></label>
                                     <input class="form-control" type="text" name="autor" value="<?php echo htmlentities($aut); ?>" required />
@@ -200,6 +200,11 @@ if (isset($_POST['guardar'])) {
                                 <div class="form-group">
                                     <label>Cantidad<span style="color:red;">*</span></label>
                                     <input class="form-control" type="number" name="cantidad" value="<?php echo htmlentities($cantidad); ?>" required />
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Estado del libro<span style="color:red;">*</span></label>
+                                    <input class="form-control" type="text" name="estado" value="<?php echo htmlentities($estado); ?>" required />
                                 </div>
                                 <button type="submit" name="guardar" class="btn btn-info">Guardar</button>
                             </form>
