@@ -2,52 +2,53 @@
 session_start();
 include('includes/config.php');
 error_reporting(0);
-if (strlen($_SESSION['login']) == 0) {
+if (strlen($_SESSION['registrar']) == 0) {
     header('location:index.php');
 } else {
-    if (isset($_POST['update'])) {
-        $sid = $_SESSION['stdid'];
-        $fname = $_POST['fullanme'];
-        $mobileno = $_POST['mobileno'];
+    if (isset($_POST['update'])){
+        $sid = $_SESSION['docenteid'];
+        $fname = $_POST['nombre'];
 
-        $sql = "update tblstudents set FullName=:fname,MobileNumber=:mobileno where StudentId=:sid";
+        $sql = "update tbldocentes set nombre:=fname where docenteid=sid:";
         $query = $dbh->prepare($sql);
         $query->bindParam(':sid', $sid, PDO::PARAM_STR);
         $query->bindParam(':fname', $fname, PDO::PARAM_STR);
-        $query->bindParam(':mobileno', $mobileno, PDO::PARAM_STR);
+
         $query->execute();
 
         echo '<script>alert("Your profile has been updated")</script>';
+
     }
+}
 
 ?>
 
-    <!DOCTYPE html>
-    <html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <!--[if IE]>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!--[if IE]>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <![endif]-->
-        <title>SIOB | Mi perfil de estudiante</title>
-        <!-- BOOTSTRAP CORE STYLE  -->
-        <link href="assets/css/bootstrap.css" rel="stylesheet" />
-        <!-- FONT AWESOME STYLE  -->
-        <link href="assets/css/font-awesome.css" rel="stylesheet" />
-        <!-- CUSTOM STYLE  -->
-        <link href="assets/css/style.css" rel="stylesheet" />
-        <!-- GOOGLE FONT -->
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <title>SIOB | Mi perfil de docente</title>
+    <!-- BOOTSTRAP CORE STYLE  -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- FONT AWESOME STYLE  -->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <!-- CUSTOM STYLE  -->
+    <link href="assets/css/style.css" rel="stylesheet" />
+    <!-- GOOGLE FONT -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 
-    </head>
+</head>
 
-    <body>
+<body>
         <!------MENU SECTION START-->
-        <?php include('includes/header.php'); ?>
+        <?php include('includes/headerds.php');?>
         <!-- MENU SECTION END-->
         <div class="content-wrapper">
             <div class="container">
@@ -69,7 +70,7 @@ if (strlen($_SESSION['login']) == 0) {
                                 <form name="signup" method="post">
                                     <?php
                                     $sid = $_SESSION['stdid'];
-                                    $sql = "SELECT StudentId,FullName,EmailId,MobileNumber,RegDate,UpdationDate,Status from  tblstudents  where StudentId=:sid ";
+                                    $sql = "SELECT docenteid,nombre,email,regDate,UpdationDate,Status from  tbldocentes  where docenteid=:sid ";
                                     $query = $dbh->prepare($sql);
                                     $query->bindParam(':sid', $sid, PDO::PARAM_STR);
                                     $query->execute();
@@ -108,7 +109,7 @@ if (strlen($_SESSION['login']) == 0) {
 
                                             <div class="form-group">
                                                 <label> Nombre completo</label>
-                                                <input class="form-control" type="text" name="fullanme" value="<?php echo htmlentities($result->FullName); ?>" autocomplete="off" required readonly />
+                                                <input class="form-control" type="text" name="nombre" value="<?php echo htmlentities($result->nombre); ?>" autocomplete="off" required readonly />
                                             </div>
 
 
@@ -119,7 +120,7 @@ if (strlen($_SESSION['login']) == 0) {
 
                                             <div class="form-group">
                                                 <label>Ingrese correo electronico</label>
-                                                <input class="form-control" type="email" name="email" id="emailid" value="<?php echo htmlentities($result->EmailId); ?>" autocomplete="off" required readonly />
+                                                <input class="form-control" type="email" name="email" id="emailid" value="<?php echo htmlentities($result->email); ?>" autocomplete="off" required readonly />
                                             </div>
                                     <?php }
                                     } ?>
@@ -142,5 +143,4 @@ if (strlen($_SESSION['login']) == 0) {
         <script src="assets/js/custom.js"></script>
     </body>
 
-    </html>
-<?php } ?>
+</html>

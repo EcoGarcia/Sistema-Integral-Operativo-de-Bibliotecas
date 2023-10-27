@@ -38,7 +38,7 @@ echo "<script>alert('Your Account Has been blocked .Please contact admin');</scr
 } 
 
 else{
-echo "<script>alert('Invalid Details');</script>";
+echo "<script>alert('Datos Invalidos');window.location='index.php'</script>";
 }
 }
 
@@ -84,13 +84,13 @@ echo "<script>alert('Invalid Details');</script>";
 <form role="form" method="post">
 
 <div class="form-group">
-<label>Escribe tu correo (Solo correo institucional).</label>
-<input class="form-control" type="text" name="emailid" required autocomplete="off" />
+<label>Escribe tu correo (Solo correo escolar).</label>
+<input class="form-control" type="text" name="emailid" required autocomplete="off"   />
 </div>
 <div class="form-group">
 <label>Contraseña</label>
 <input class="form-control" type="password" name="password" required autocomplete="off"  />
-<p class="help-block"><a href="user-forgot-password.php">Has olvidado tu contraseña</a></p>
+<!-- <p class="help-block"><a href="user-forgot-password.php">Has olvidado tu contraseña</a></p> -->
 </div>
 
  <!-- <div class="form-group">

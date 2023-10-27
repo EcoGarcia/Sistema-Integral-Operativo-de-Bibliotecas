@@ -2,32 +2,46 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
-if ($_SESSION['alogin'] != '') {
-    $_SESSION['alogin'] = '';
+if($_SESSION['registrar']!=''){
+$_SESSION['registrar']='';
 }
-if (isset($_POST['login'])) {
-    //code for captach verification
-    // if ($_POST["vercode"] != $_SESSION["vercode"] OR $_SESSION["vercode"]=='')  {
-    //         echo "<script>alert('Incorrect verification code');</script>" ;
-    //     } 
-    //         else {
+if(isset($_POST['registrar']))
+{
+  //code for captach verification
+// if ($_POST["vercode"] != $_SESSION["vercode"] OR $_SESSION["vercode"]=='')  {
+//         echo "<script>alert('Incorrect verification code');</script>" ;
+//     } 
+//         else {
+$email=$_POST['emailid'];
+$password=md5($_POST['password']);
+$sql ="SELECT email,contrasena,docenteId,Status FROM tbldocentes WHERE email=:email and contrasena=:password";
+$query= $dbh -> prepare($sql);
+$query-> bindParam(':email', $email, PDO::PARAM_STR);
+$query-> bindParam(':password', $password, PDO::PARAM_STR);
+$query-> execute();
+$results=$query->fetchAll(PDO::FETCH_OBJ);
 
-    $FullName = $_POST['FullName'];
-    $password = md5($_POST['password']);
-    $sql = "SELECT FullName,Password FROM tbladmin WHERE FullName=:FullName and Password=:password";
-    $query = $dbh->prepare($sql);
-    $query->bindParam(':FullName', $FullName, PDO::PARAM_STR);
-    $query->bindParam(':password', $password, PDO::PARAM_STR);
-    $query->execute();
-    $results = $query->fetchAll(PDO::FETCH_OBJ);
-    if ($query->rowCount() > 0) {
-        $_SESSION['alogin'] = $_POST['FullName'];
-        echo "<script type='text/javascript'> document.location ='admin/dashboard.php'; </script>";
-    } else {
-        echo "<script>alert('Datos incorrectos');window.location = 'adminlogin.php'</script>";
-    }
+if($query->rowCount() > 0)
+{
+ foreach ($results as $result) {
+ $_SESSION['stdid']=$result->docenteId;
+if($result->Status==1)
+{
+$_SESSION['registrar']=$_POST['emailid'];
+echo "<script type='text/javascript'> document.location ='dashboardds.php'; </script>";
+} else {
+echo "<script>alert('Your Account Has been blocked .Please contact admin')</script>";
+
 }
-// }
+}
+
+} 
+
+else{
+echo "<script>alert('Datos inavlidos');window.location='docente.php'</script>";
+}
+}
+
 ?>
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -37,8 +51,7 @@ if (isset($_POST['login'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <meta name="description" content="" />
     <meta name="author" content="" />
-    <title>SIOB</title>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <title> SIOB |Docente </title>
     <!-- BOOTSTRAP CORE STYLE  -->
     <link href="assets/css/bootstrap.css" rel="stylesheet" />
     <!-- FONT AWESOME STYLE  -->
@@ -47,18 +60,18 @@ if (isset($_POST['login'])) {
     <link href="assets/css/style.css" rel="stylesheet" />
     <!-- GOOGLE FONT -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
-
 </head>
 
 <body>
-    <!------MENU SECTION START-->
     <?php include('includes/header.php'); ?>
-    <!-- MENU ECTION END-->
+
+    <!-- MENU SECTION END-->
     <div class="content-wrapper">
         <div class="container">
             <div class="row pad-botm">
                 <div class="col-md-12">
-                    <h4 class="header-line">INICIAR SESION DE ADMINISTRADOR</h4>
+                    <h4 class="header-line">INICIAR COMO DOCENTE<Font size="7"></Font>
+                    </h4>
                 </div>
             </div>
 
@@ -73,26 +86,21 @@ if (isset($_POST['login'])) {
                             <form role="form" method="post">
 
                                 <div class="form-group">
-                                    <label>Nombre de usuario</label>
-                                    <input class="form-control" type="text" name="FullName" autocomplete="off" required />
+                                    <label>Escribe tu correo (Solo correo escolar).</label>
+                                    <input class="form-control" title="DEBE SER EL INSTITUCIONAL" type="text" name="emailid" required autocomplete="off" />
                                 </div>
                                 <div class="form-group">
                                     <label>Contraseña</label>
                                     <input class="form-control" type="password" name="password" required autocomplete="off" />
-                                    <p class="help-block"><a href="forgot_correo.php">Has olvidado tu contraseña</a></p>
+                                    <!-- <p class="help-block"><a href="user-forgot-password.php">Has olvidado tu contraseña</a></p> -->
                                 </div>
-                                <div class="form-group">
 
+                                <!-- <div class="form-group">
+<label>Codigo de verificación: </label>
+<input type="text" class="form-control1"  name="vercode" maxlength="5" autocomplete="off" required  style="height:25px;" />&nbsp;<img src="captcha.php">
+</div>  -->
 
-
-
-                                    <!-- <div class="form-group">
-<label> Codigo de verificación : </label>
-<input type="text"  name="vercode" maxlength="5" autocomplete="off" required style="width: 150px; height: 25px;" />&nbsp;<img src="captcha.php">
-</div>   -->
-
-
-                                    <button type="submit" name="login" class="btn btn-info">INICIAR </button>
+                                <button type="submit" name="registrar" class="btn btn-info">INICIAR </button>
                             </form>
                         </div>
                     </div>
@@ -103,6 +111,16 @@ if (isset($_POST['login'])) {
 
         </div>
     </div>
+
+
+
+
+
+
+
+
+
+
     <!-- CONTENT-WRAPPER SECTION END-->
     <?php include('includes/footer.php'); ?>
     <!-- FOOTER SECTION END-->
@@ -115,3 +133,4 @@ if (isset($_POST['login'])) {
 </body>
 
 </html>
+

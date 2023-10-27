@@ -2,22 +2,22 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
-if(strlen($_SESSION['login'])==0)
-{ 
-    header('location:index.php');
-}
-else {
-  // Obtener los libros y su cantidad
-  $sql = "SELECT nombre, cantidad FROM libros";
-  $query = $dbh->prepare($sql);
-  $query->execute();
-  $books = $query->fetchAll(PDO::FETCH_ASSOC);
 
-  // Obtener las categorías y la colocación
-  $sql2 = "SELECT CategoryName, colocación FROM tblcategory";
-  $query2 = $dbh->prepare($sql2);
-  $query2->execute();
-  $categories = $query2->fetchAll(PDO::FETCH_ASSOC);
+// Verificar si la sesión está activa
+if (strlen($_SESSION['login']) == 0) {
+    header('location:index.php'); // Redirigir al usuario a index.php si no está autenticado
+} else {
+    // Obtener los libros y su cantidad
+    $sql = "SELECT nombre, cantidad FROM libros";   
+    $query = $dbh->prepare($sql);
+    $query->execute();
+    $books = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    // Obtener las categorías y la colocación
+    $sql2 = "SELECT CategoryName, colocación FROM tblcategory";
+    $query2 = $dbh->prepare($sql2);
+    $query2->execute();
+    $categories = $query2->fetchAll(PDO::FETCH_ASSOC);
 }
 ?>
 
@@ -40,8 +40,8 @@ else {
 </head>
 <body>
     <!------MENU SECTION START-->
-    <?php include('includes/header.php');?>
-    <!-- MENU SECTION END-->
+    <?php include('includes/header.php'); ?>
+    <!-- MENU SECTION END -->
 
     <!-- CONTENIDO DE LAS TABLAS -->
     <div class="container">
@@ -50,6 +50,12 @@ else {
                 <h4 class="header-line">Panel de usuario</h4>
             </div>
         </div>
+                <!-- Mostrar el nombre de usuario autenticado y permitir cerrar sesión -->
+                <!-- <div class="row">
+            <div class="col-md-12">
+                <p>Bienvenido, <?php echo $_SESSION['login']; ?> 
+            </div>
+        </div> -->
 
         <div class="row">
             <div class="col-md-6">
@@ -108,17 +114,17 @@ else {
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- CONTENT-WRAPPER SECTION END-->
-    <?php include('includes/footer.php');?>
-    <!-- FOOTER SECTION END-->
-    <!-- JAVASCRIPT FILES PLACED AT THE BOTTOM TO REDUCE THE LOADING TIME  -->
-    <!-- CORE JQUERY  -->
+
+    <!-- FOOTER SECTION -->
+    <?php include('includes/footer.php'); ?>
+
+    <!-- JAVASCRIPT FILES PLACED AT THE BOTTOM TO REDUCE THE LOADING TIME -->
+    <!-- CORE JQUERY -->
     <script src="assets/js/jquery-1.10.2.js"></script>
-    <!-- BOOTSTRAP SCRIPTS  -->
+    <!-- BOOTSTRAP SCRIPTS -->
     <script src="assets/js/bootstrap.js"></script>
-    <!-- CUSTOM SCRIPTS  -->
+    <!-- CUSTOM SCRIPTS -->
     <script src="assets/js/custom.js"></script>
 </body>
 </html>
