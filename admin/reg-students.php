@@ -1,185 +1,151 @@
 <?php
 session_start();
-error_reporting(0);
 include('includes/config.php');
+error_reporting(0);
+if (isset($_POST['signup'])) {
+    //code for captach verification  
+    //Code for student ID
+    $count_my_page = ("studentid.txt");
+    $hits = file($count_my_page);
+    $hits[0]++;
+    $fp = fopen($count_my_page, "w");
+    fputs($fp, "$hits[0]");
+    fclose($fp);
+    $StudentId = $hits[0];
+    $fname = $_POST['fullanme'];
+    $email = $_POST['email'];
+    $password = md5($_POST['password']);
+    $status = 1;
+    $sql = "INSERT INTO  tbladmin(AdminId,FullName,EmailId,Password,Status) VALUES(:StudentId,:fname,:email,:password,:status)";
+    $query = $dbh->prepare($sql);
+    $query->bindParam(':StudentId', $StudentId, PDO::PARAM_STR);
+    $query->bindParam(':fname', $fname, PDO::PARAM_STR);
+    $query->bindParam(':email', $email, PDO::PARAM_STR);
+    $query->bindParam(':password', $password, PDO::PARAM_STR);
+    $query->bindParam(':status', $status, PDO::PARAM_STR);
+    $query->execute();
 
-if (strlen($_SESSION['alogin']) == 0) {
-    header('location:index.php');
-} else {
-    // código para bloquear estudiantes    
-    if (isset($_GET['inid'])) {
-        $id = $_GET['inid'];
-        $status = 0;
-        $sql = "update tblstudents set Status=:status WHERE id=:id";
-        $query = $dbh->prepare($sql);
-        $query->bindParam(':id', $id, PDO::PARAM_STR);
-        $query->bindParam(':status', $status, PDO::PARAM_STR);
-        $query->execute();
-        header('location:reg-students.php');
+    $lastInsertId = $dbh->lastInsertId();
+    if ($lastInsertId) {
+        echo "<script>alert('Administrador agregado con exito');
+        window.location = '../admin/administradores.php'</script>";
     }
+}
 
-    // código para activar estudiantes
-    if (isset($_GET['id'])) {
-        $id = $_GET['id'];
-        $status = 1;
-        $sql = "update tblstudents set Status=:status WHERE id=:id";
-        $query = $dbh->prepare($sql);
-        $query->bindParam(':id', $id, PDO::PARAM_STR);
-        $query->bindParam(':status', $status, PDO::PARAM_STR);
-        $query->execute();
-        header('location:reg-students.php');
-    }
 
-    // código para editar estudiantes
-    if (isset($_GET['editid'])) {
-        $id = $_GET['editid'];
-        // Redirige a la página de edición con el id del estudiante
-        header("location:edit-students.php?id=$id");
-    }
-
-    // código para eliminar estudiantes
-    if (isset($_GET['delid'])) {
-        $id = $_GET['delid'];
-        $sql = "DELETE FROM tblstudents WHERE id=:id";
-        $query = $dbh->prepare($sql);
-        $query->bindParam(':id', $id, PDO::PARAM_STR);
-        $query->execute();
-        header('location:reg-students.php');
-    }
 ?>
 
-    <!DOCTYPE html>
-    <html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>SIOB | Administrar estudiantes registrados</title>
-        <!-- BOOTSTRAP CORE STYLE  -->
-        <link href="assets/css/bootstrap.css" rel="stylesheet" />
-        <!-- FONT AWESOME STYLE  -->
-        <link href="assets/css/font-awesome.css" rel="stylesheet" />
-        <!-- DATATABLE STYLE  -->
-        <link href="assets/js/dataTables/dataTables.bootstrap.css" rel="stylesheet" />
-        <!-- CUSTOM STYLE  -->
-        <link href="assets/css/style.css" rel="stylesheet" />
-        <!-- GOOGLE FONT -->
-        <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
-    </head>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <!--[if IE]>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <![endif]-->
+    <title>SIOB | Registro de administradores</title>
+    <!-- BOOTSTRAP CORE STYLE  -->
+    <link href="assets/css/bootstrap.css" rel="stylesheet" />
+    <!-- FONT AWESOME STYLE  -->
+    <link href="assets/css/font-awesome.css" rel="stylesheet" />
+    <!-- CUSTOM STYLE  -->
+    <link href="assets/css/style.css" rel="stylesheet" />
+    <!-- GOOGLE FONT -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
+    <script type="text/javascript">
+        function valid() {
+            if (document.signup.password.value != document.signup.confirmpassword.value) {
+                alert("Las contraseñas no coinciden");
+                document.signup.confirmpassword.focus();
+                return false;
+            }
+            return true;
+        }
+    </script>
+    <script>
+        function checkAvailability() {
+            $("#loaderIcon").show();
+            jQuery.ajax({
+                url: "check_availability.php",
+                data: 'emailid=' + $("#emailid").val(),
+                type: "POST",
+                success: function(data) {
+                    $("#user-availability-status").html(data);
+                    $("#loaderIcon").hide();
+                },
+                error: function() {}
+            });
+        }
+    </script>
 
-    <body>
-        <!------MENU SECTION START-->
-        <?php include('includes/header.php'); ?>
-        <!-- MENU SECTION END-->
+</head>
 
-        <div class="content-wrapper">
-            <div class="container">
-                <div class="row pad-botm">
-                    <div class="col-md-12">
-                        <h4 class="header-line">Administrar estudiantes registrados</h4>
-                    </div>
+<body>
+    <!------MENU SECTION START-->
+    <?php include('includes/header.php'); ?>
+
+    <!-- location -->
+    <!-- MENU SECTION END-->
+    <div class="content-wrapper">
+        <div class="container">
+            <div class="row pad-botm">
+                <div class="col-md-12">
+                    <h4 class="header-line">Registro de un nuevo administrador</h4>
+
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <!-- Advanced Tables -->
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                Estudiantes registrados
-                            </div>
-                            <div class="panel-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped table-bordered table-hover" id="dataTables-example">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>ID de estudiante</th>
-                                                <th>Nombre del estudiante</th>
-                                                <th>Correo</th>
-                                                <th>Fecha de registro</th>
-                                                <th>Estado</th>
-                                                <th>Opciones</th>
-                                                <th>Editar</th>
-                                                <th>Eliminar</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            $sql = "SELECT * from tblstudents";
-                                            $query = $dbh->prepare($sql);
-                                            $query->execute();
-                                            $results = $query->fetchAll(PDO::FETCH_OBJ);
-                                            $cnt = 1;
-                                            if ($query->rowCount() > 0) {
-                                                foreach ($results as $result) { ?>
-                                                    <tr class="odd gradeX">
-                                                        <td class="center"><?php echo htmlentities($cnt); ?></td>
-                                                        <td class="center"><?php echo htmlentities($result->StudentId); ?></td>
-                                                        <td class="center"><?php echo htmlentities($result->FullName); ?></td>
-                                                        <td class="center"><?php echo htmlentities($result->EmailId); ?></td>
-                                                        <td class="center"><?php echo htmlentities($result->RegDate); ?></td>
-                                                        <td class="center">
-                                                            <?php if ($result->Status == 1) {
-                                                                echo htmlentities("Active");
-                                                            } else {
-                                                                echo htmlentities("Blocked");
-                                                            } ?>
-                                                        </td>
-                                                        <td class="center">
-                                                            <?php if ($result->Status == 1) { ?>
-                                                                <a href="reg-students.php?inid=<?php echo htmlentities($result->id); ?>" onclick="return confirm('Are you sure you want to block this student?');">
-                                                                    <button class="btn btn-info"> Inactivo</button>
-                                                                </a>
-                                                            <?php } else { ?>
-                                                                <a href="reg-students.php?id=<?php echo htmlentities($result->id); ?>" onclick="return confirm('Are you sure you want to activate this student?');">
-                                                                    <button class="btn btn-primary"> Activo</button>
-                                                                </a>
-                                                            <?php } ?>
-                                                        </td>
-                                                        <!-- Nuevo td para el botón de Editar -->
-                                                        <td class="center">
-                                                            <a href="edit-students.php?StudentId=<?php echo htmlentities($result->StudentId); ?>">
-                                                                <button class="btn btn-warning">Editar</button>
-                                                            </a>
-                                                        </td>
 
-                                                        <td class="center">
-                                                            <a href="reg-students.php?delid=<?php echo htmlentities($result->id); ?>" onclick="return confirm('Are you sure you want to delete this student?');">
-                                                                <button class="btn btn-danger">Eliminar</button>
-                                                            </a>
-                                                        </td>
+            </div>
+            <div class="row">
 
-                                                    </tr>
-                                            <?php
-                                                    $cnt = $cnt + 1;
-                                                }
-                                            } ?>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                <div class="col-md-9 col-md-offset-1">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            FORMULARIO DE REGISTRO
                         </div>
-                        <!--End Advanced Tables -->
+                        <div class="panel-body">
+                            <form name="signup" method="post" onSubmit="return valid();">
+                                <div class="form-group">
+                                    <label>Ingrese el nombre completo</label>
+                                    <input class="form-control" type="text" name="fullanme" autocomplete="off" required />
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Ingrese correo electrónico</label>
+                                    <input class="form-control" type="email" name="email" id="emailid" onBlur="checkAvailability()" autocomplete="off" required pattern=".+@utsalamanca.edu.mx" title="DEBE SER EL CORREO DE LA ESCUELA" />
+                                    <span id="user-availability-status" style="font-size:12px;"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Introducir la contraseña</label>
+                                    <input class="form-control" type="password" name="password" autocomplete="off" required />
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Confirmar contraseña</label>
+                                    <input class="form-control" type="password" name="confirmpassword" autocomplete="off" required />
+                                </div>
+
+                                <button type="submit" name="signup" class="btn btn-danger" id="submit">Regístrate ahora </button>
+
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- CONTENT-WRAPPER SECTION END-->
+    <?php include('includes/footer.php'); ?>
+    <script src="assets/js/jquery-1.10.2.js"></script>
+    <!-- BOOTSTRAP SCRIPTS  -->
+    <script src="assets/js/bootstrap.js"></script>
+    <!-- CUSTOM SCRIPTS  -->
+    <script src="assets/js/custom.js"></script>
+    <!-- Correos -->
+    <!-- <script src="assets/js/correos.js"></script> -->
+</body>
 
-        <!-- CONTENT-WRAPPER SECTION END-->
-        <?php include('includes/footer.php'); ?>
-        <!-- FOOTER SECTION END-->
-        <!-- JAVASCRIPT FILES PLACED AT THE BOTTOM TO REDUCE THE LOADING TIME  -->
-        <!-- CORE JQUERY  -->
-        <script src="assets/js/jquery-1.10.2.js"></script>
-        <!-- BOOTSTRAP SCRIPTS  -->
-        <script src="assets/js/bootstrap.js"></script>
-        <!-- DATATABLE SCRIPTS  -->
-        <script src="assets/js/dataTables/jquery.dataTables.js"></script>
-        <script src="assets/js/dataTables/dataTables.bootstrap.js"></script>
-        <!-- CUSTOM SCRIPTS  -->
-        <script src="assets/js/custom.js"></script>
-    </body>
-
-    </html>
-<?php } ?>
+</html>
