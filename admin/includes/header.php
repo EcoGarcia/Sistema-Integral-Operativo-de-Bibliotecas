@@ -44,7 +44,7 @@
                                 <li role="presentation"><a role="menuitem" tabindex="-1" href="administrator-registration.php">Registrar administrador</a></li>
                                 <li role="presentation"><a role="menuitem" tabindex="-1" href="registrar_estudiantes.php">Registrar Estudiantes</a></li>
                                 <li><a href="reg-students.php">Estudiantes registrados</a></li>
-                                <li><a href="administradores.php">Lista administradores</a></li>
+                                <li><a href="administradores.php">Listas administradores</a></li>
                             </ul>
                         </li>
                         <li>
