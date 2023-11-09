@@ -125,7 +125,6 @@ if (strlen($_SESSION['registrar']) == 0) {
                                     <?php }
                                     } ?>
 
-                                    <button type="submit" name="update" class="btn btn-primary" id="submit">Actualizar ahora </button>
 
                                 </form>
                             </div>

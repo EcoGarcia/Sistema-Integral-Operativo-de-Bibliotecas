@@ -2,12 +2,49 @@
 session_start();
 error_reporting(0);
 include('includes/config.php');
-if(strlen($_SESSION['registrar'])==0)
-{ 
-    header('location:index.php');
-}
-?>
 
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Verificar si se envió el formulario de inicio de sesión
+    if (isset($_POST['registrar'])) {
+        $email = $_POST['emailid'];
+        $password = md5($_POST['password']);
+        
+        $sql = "SELECT email,contrasena,docenteId,Status FROM tbldocentes WHERE email=:email and contrasena=:password";
+        $query = $dbh->prepare($sql);
+        $query->bindParam(':email', $email, PDO::PARAM_STR);
+        $query->bindParam(':password', $password, PDO::PARAM_STR);
+        $query->execute();
+        $results = $query->fetchAll(PDO::FETCH_OBJ);
+
+        if ($query->rowCount() > 0) {
+            foreach ($results as $result) {
+                $_SESSION['stdid'] = $result->docenteId;
+                if ($result->Status == 1) {
+                    $_SESSION['registrar'] = $_POST['emailid'];
+                    header('location: dashboardds.php');
+                    exit;
+                } else {
+                    echo "<script>alert('Your Account Has been blocked. Please contact admin');</script>";
+                }
+            }
+        } else {
+            echo "<script>alert('Invalid Details');</script>";
+        }
+    }
+}
+
+// Ahora, si la sesión está activa, se ejecuta el segundo conjunto de funciones
+if (isset($_SESSION['registrar'])) {
+    $sql = "SELECT nombre, cantidad FROM libros";   
+    $query = $dbh->prepare($sql);
+    $query->execute();
+    $books = $query->fetchAll(PDO::FETCH_ASSOC);
+
+    $sql2 = "SELECT CategoryName, colocación FROM tblcategory";
+    $query2 = $dbh->prepare($sql2);
+    $query2->execute();
+    $categories = $query2->fetchAll(PDO::FETCH_ASSOC);
+?>
 
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -29,19 +66,89 @@ if(strlen($_SESSION['registrar'])==0)
 </head>
 
 <body>
-        <!------MENU SECTION START-->
-        <?php include('includes/headerds.php');?>
+    <!------MENU SECTION START-->
+    <?php include('includes/headerds.php'); ?>
+    <!-- MENU SECTION END -->
 
-    <!-- CONTENT-WRAPPER SECTION END-->
+    <!-- CONTENIDO DE LAS TABLAS -->
+    <div class="container">
+        <div class="row pad-botm">
+            <div class="col-md-12">
+                <h4 class="header-line">Panel de usuario</h4>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        Libros disponibles
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre del libro</th>
+                                        <th>Cantidad</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($books as $book) : ?>
+                                        <tr>
+                                            <td><?php echo $book['nombre']; ?></td>
+                                            <td><?php echo $book['cantidad']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        Categorías
+                    </div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Categoría</th>
+                                        <th>Colocación</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($categories as $category) : ?>
+                                        <tr>
+                                            <td><?php echo $category['CategoryName']; ?></td>
+                                            <td><?php echo $category['colocación']; ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER SECTION -->
     <?php include('includes/footer.php'); ?>
-    <!-- FOOTER SECTION END-->
-    <!-- JAVASCRIPT FILES PLACED AT THE BOTTOM TO REDUCE THE LOADING TIME  -->
-    <!-- CORE JQUERY  -->
+
+    <!-- JAVASCRIPT FILES PLACED AT THE BOTTOM TO REDUCE THE LOADING TIME -->
+    <!-- CORE JQUERY -->
     <script src="assets/js/jquery-1.10.2.js"></script>
-    <!-- BOOTSTRAP SCRIPTS  -->
+    <!-- BOOTSTRAP SCRIPTS -->
     <script src="assets/js/bootstrap.js"></script>
-    <!-- CUSTOM SCRIPTS  -->
+    <!-- CUSTOM SCRIPTS -->
     <script src="assets/js/custom.js"></script>
 </body>
 
-</html>
+</html><?php
+}
+?>

@@ -30,7 +30,7 @@ if($result->Status==1)
 $_SESSION['registrar']=$_POST['emailid'];
 echo "<script type='text/javascript'> document.location ='dashboardds.php'; </script>";
 } else {
-echo "<script>alert('Your Account Has been blocked .Please contact admin')</script>";
+echo "<script>alert('Your Account Has been blocked .Please contact admin');</script>";
 
 }
 }
@@ -38,7 +38,7 @@ echo "<script>alert('Your Account Has been blocked .Please contact admin')</scri
 } 
 
 else{
-echo "<script>alert('Datos inavlidos');window.location='docente.php'</script>";
+echo "<script>alert('Invalid Details');</script>";
 }
 }
 
@@ -87,7 +87,7 @@ echo "<script>alert('Datos inavlidos');window.location='docente.php'</script>";
 
                                 <div class="form-group">
                                     <label>Escribe tu correo (Solo correo escolar).</label>
-                                    <input class="form-control" title="DEBE SER EL INSTITUCIONAL" type="text" name="emailid" required autocomplete="off" />
+                                    <input class="form-control" type="text" name="emailid" required autocomplete="off" />
                                 </div>
                                 <div class="form-group">
                                     <label>Contraseña</label>
@@ -133,4 +133,3 @@ echo "<script>alert('Datos inavlidos');window.location='docente.php'</script>";
 </body>
 
 </html>
-

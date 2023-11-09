@@ -24,7 +24,7 @@ if (isset($_POST['login'])) {
         $_SESSION['alogin'] = $_POST['FullName'];
         echo "<script type='text/javascript'> document.location ='admin/dashboard.php'; </script>";
     } else {
-        echo "<script>alert('Datos incorrectos');window.location = 'adminlogin.php'</script>";
+        echo "<script>alert('Invalid Details');</script>";
     }
 }
 // }
@@ -49,13 +49,21 @@ if (isset($_POST['login'])) {
     <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />
 
 </head>
+<style>
+    h4 {
+        text-align: center;
+    }
 
+    .login-form {
+        margin-top: 50px;
+    }
+</style>
 <body>
     <!------MENU SECTION START-->
     <?php include('includes/header.php'); ?>
     <!-- MENU ECTION END-->
     <div class="content-wrapper">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row pad-botm">
                 <div class="col-md-12">
                     <h4 class="header-line">INICIAR SESION DE ADMINISTRADOR</h4>
@@ -65,7 +73,7 @@ if (isset($_POST['login'])) {
             <!--LOGIN PANEL START-->
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-12 col-md-offset-3">
-                    <div class="panel panel-info">
+                    <div class="panel panel-info login-form"> <!-- Cambio aquí: login-form -->
                         <div class="panel-heading">
                             FORMULARIO
                         </div>
@@ -82,24 +90,15 @@ if (isset($_POST['login'])) {
                                     <p class="help-block"><a href="forgot_correo.php">Has olvidado tu contraseña</a></p>
                                 </div>
                                 <div class="form-group">
-
-
-
-
-                                    <!-- <div class="form-group">
-<label> Codigo de verificación : </label>
-<input type="text"  name="vercode" maxlength="5" autocomplete="off" required style="width: 150px; height: 25px;" />&nbsp;<img src="captcha.php">
-</div>   -->
-
-
-                                    <button type="submit" name="login" class="btn btn-info">INICIAR </button>
+                                    <!-- Código del captcha -->
+                                </div>
+                                <button type="submit" name="login" class="btn btn-info">INICIAR </button>
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
-            <!---LOGIN PABNEL END-->
-
+            <!---LOGIN PANEL END-->
 
         </div>
     </div>
@@ -111,7 +110,6 @@ if (isset($_POST['login'])) {
     <script src="assets/js/bootstrap.js"></script>
     <!-- CUSTOM SCRIPTS  -->
     <script src="assets/js/custom.js"></script>
-    </script>
 </body>
 
 </html>

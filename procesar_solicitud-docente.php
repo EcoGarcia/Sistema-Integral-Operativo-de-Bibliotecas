@@ -8,7 +8,7 @@ if (isset($_POST['libro_id']) && isset($_POST['fecha_pedido']) && isset($_POST['
 
     // Obtener el nombre del estudiante de la sesión
     session_start();
-    $nombreEstudiante = $_SESSION['login']; // Cambiar 'stdname' a 'login'
+    $nombreEstudiante = $_SESSION['registrar']; // Cambiar 'stdname' a 'login'
 
     // Conectar a la base de datos (reemplaza con tus propios detalles)
     $servername = "localhost";
@@ -79,6 +79,8 @@ if (isset($_POST['libro_id']) && isset($_POST['fecha_pedido']) && isset($_POST['
             $pdf->Cell(0, 10, 'Estado: ' . $row['estado'], 0, 1);
             $pdf->Cell(0, 10, 'Fecha de Pedido: ' . $fecha_pedido, 0, 1);
             $pdf->Cell(0, 10, 'Fecha de Devolución: ' . $fecha_devolucion, 0, 1);
+
+            
             
         } else {
             // Mensaje de error si no se encuentra el libro
